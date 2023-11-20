@@ -1,29 +1,39 @@
 package com.apm.apm_backend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name="users")
-public class UserModel
-{
+public class UserModel {
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "user_id")
 	private Integer userId;
+
+	@Column(name = "first_name")
 	private String firstName;
+
+	@Column(name = "user_name")
 	private String userName;
+
+	@Column(name = "user_type")
 	private String userType;
+
+	@Column(name = "user_email")
+	private String userEmail;
+	private String password;
 	private boolean status;
-	
+
 	public UserModel() {
 	}
 
-	public UserModel(Integer userId, String firstName, String userName, String userType, boolean status)
-	{
+	public UserModel(Integer userId, String firstName, String userName, String userType, String userEmail, String password, boolean status) {
 		this.userId = userId;
 		this.firstName = firstName;
 		this.userName = userName;
 		this.userType = userType;
+		this.userEmail = userEmail;
+		this.password = password;
 		this.status = status;
 	}
 
@@ -57,6 +67,22 @@ public class UserModel
 
 	public void setUserType(String userType) {
 		this.userType = userType;
+	}
+
+	public String getUserEmail() {
+		return userEmail;
+	}
+
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public boolean isStatus() {
