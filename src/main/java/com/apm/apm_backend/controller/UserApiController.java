@@ -1,21 +1,15 @@
 package com.apm.apm_backend.controller;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import com.apm.apm_backend.model.UserModel;
 import com.apm.apm_backend.service.UserService;
 
 @RestController
-@RequestMapping("/users")
-public class UserApiController
-{
+@RequestMapping("/api/v1/users")
+public class UserApiController {
 	UserService userService;
 
 	public UserApiController(UserService userService) {
@@ -23,37 +17,42 @@ public class UserApiController
 	}
 
 	@GetMapping
-	public List<UserModel> getUsers()
-	{
+	@ResponseStatus(HttpStatus.OK)
+	public List<UserModel> getUsers() {
 		return userService.getAllUsers();
 	}
 	
 	@GetMapping("{userId}")
-	public UserModel getUser(@PathVariable("userId") Integer userId)
-	{
-		return userService.getuser(userId);
+	@ResponseStatus(HttpStatus.OK)
+	public UserModel getUser(@PathVariable("userId") Integer userId) {
+		return userService.getUser(userId);
 	}
 	
 	@PostMapping
-	public String createUser(@RequestBody UserModel userDetails)
-	{
-		userService.createUser(userDetails);
-		return "User created successfully";
+	@ResponseStatus(HttpStatus.CREATED)
+	public String createUser(@RequestBody UserModel userDetails) {
+
+        return userService.createUser(userDetails);
 	}
 	
-	@PutMapping
-	public String updateUser(@RequestBody UserModel userDetails)
-	{
-		userService.createUser(userDetails);
-		return "User updated successfully";
+	@PutMapping("{userId}")
+	@ResponseStatus(HttpStatus.OK)
+	public String updateUser(@RequestBody UserModel userDetails, @PathVariable("userId") Integer userId) {
+		userDetails.setUserId(userId);
+
+		return userService.updateUser(userDetails);
 	}
 	
 	
-	@DeleteMapping
-	public String deleteUser(@PathVariable("userId") Integer userId)
-	{
-		userService.deleteUser(userId);
-		return "User deleted successfully";
+	@DeleteMapping("{userId}")
+	@ResponseStatus(HttpStatus.OK)
+	public String deleteUser(@PathVariable("userId") Integer userId) {
+		return userService.deleteUser(userId);
+	}
+
+	@RequestMapping(value = "/confirm", method = {RequestMethod.GET, RequestMethod.POST})
+	public String confirmUserAccount(@RequestParam("token") String confirmationToken) {
+		return userService.confirmEmail(confirmationToken);
 	}
 
 }
