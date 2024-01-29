@@ -40,7 +40,7 @@ public class UserServiceImplementation implements UserService {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setTo(userDetails.getUserEmail());
 		mailMessage.setSubject("User Registration!");
-		mailMessage.setText("To confirm your account, click here: "+"http://localhost:8080/confirm-account?token="+confirmationTokenModel.getConfirmationToken());
+		mailMessage.setText("To confirm your account, click here: "+"http://localhost:8080/api/v1/users/confirm?token="+confirmationTokenModel.getConfirmationToken());
 
 		emailService.sendEmail(mailMessage);
 
